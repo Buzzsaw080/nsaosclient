@@ -256,7 +256,10 @@ def select_sending_method(title,content):
         match input("What method should be used to send: "):
             case "1":
                 recipient = input("Enter the recipient: ")
-                print(return_action_result(client.send_mail(title,content,recipient)))
+                try:
+                    print(return_action_result(client.send_mail(title,content,recipient)))
+                except UnicodeEncodeError as e:
+                    print(f"{Fore.RED}Failed to encode username, this is a known bug{Style.RESET_ALL}")
                 return
             case "2":
                 recipients = get_long_input("Enter list of recipients then save and quit").strip().split("\n")
@@ -298,7 +301,10 @@ def mass_send(title,content,recipients):
     recipients = tqdm(recipients)
     for recipient in recipients:
         recipients.set_description(f"Mailing {recipient}")
-        results.append(recipient + ": " + return_action_result(client.send_mail(title,content,recipient)))
+        try:
+            results.append(recipient + ": " + return_action_result(client.send_mail(title,content,recipient)))
+        except UnicodeEncodeError as e:
+            results.append(recipient + ": " + f"{Fore.RED}Failed to encode username, this is a known bug{Style.RESET_ALL}")
                 
     print_list(results)
 
