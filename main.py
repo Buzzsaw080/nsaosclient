@@ -325,6 +325,7 @@ def return_action_result(response:Response):
         return f"{Fore.RED}{response.text}{Style.RESET_ALL}"
 
 def discover_player(username:str):
+    username = username.lower()
     if not username in knownplayers:
         knownplayers.append(username)
         with open(script_dir / "knownplayers.txt","w") as f:
